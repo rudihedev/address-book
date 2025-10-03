@@ -7,3 +7,18 @@ This project is dealing with organize information on name, phone, email, and add
 - Check it out here: [address.rudihe.com](https://address.rudihe.com)
 - GitHub Repo: [github.com/rudihedev/address](https://github.com/rudihedev/address)
 - Flowchart Design in Whimsical: [address.rudihe.com/whimsical](https://whimsical.com/address-MSoK8fnXQveG94MjYyJyYk)
+
+## Functions
+
+- Add
+- Edit
+- View
+- Delete
+
+## Contact
+
+Should you have any inqueries, kindly contact the above socmeds.
+
+## Preview
+
+![home](images/address.jpg)

@@ -5,7 +5,7 @@ const contacts = [
     id: 1,
     fullName: "Rudi Heriansyah",
     phone: "+62-811-9870-2232",
-    email: "rudihedev@gmail.com",
+    email: "rudiheku@gmail.com",
     address: "Palembang, Indonesia",
   },
   {

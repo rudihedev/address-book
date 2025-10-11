@@ -39,7 +39,7 @@ const dataContacts = [
   },
 ];
 
-function viewContacts(contacts) {
+function displayContacts(contacts) {
   for (let index = 0; index < contacts.length; index++) {
     const contact = contacts[index];
     console.log(`
@@ -53,4 +53,4 @@ function viewContacts(contacts) {
   }
 }
 
-viewContacts(dataContacts);
+displayContacts(dataContacts);

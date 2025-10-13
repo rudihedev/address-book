@@ -51,7 +51,6 @@ const dataContacts = [
   },
 ];
 
-// To display contacts
 function displayContacts(contacts) {
   for (let index = 0; index < contacts.length; index++) {
     const contact = contacts[index];
@@ -66,26 +65,22 @@ function displayContacts(contacts) {
   }
 }
 
-// To search contacts
-function searchContacts(contacts) {
-  const keyword = prompt("Enter any name to find: ");
-
+function searchContacts(contacts, keyword) {
   const searchResults = contacts.filter((contact) =>
     contact.fullName.toLowerCase().includes(keyword.toLowerCase())
   );
   return searchResults;
 }
 
-// To add contact
-function addContact() {
-  const fullName = prompt("Enter full name: ");
-  const phone = prompt("Enter phone number: ");
-  const email = prompt("Enter e-mail address: ");
-  const street = prompt("Enter street address: ");
-  const city = prompt("Enter city: ");
-  const zipCode = prompt("Enter ZIP code: ");
-  const country = prompt("Enter country: ");
-
+function addContact(
+  fullName = "Unknown",
+  phone = null,
+  email = null,
+  street = null,
+  city = null,
+  zipCode = null,
+  country = null
+) {
   const newId =
     dataContacts.length > 0 ? dataContacts[dataContacts.length - 1].id + 1 : 1;
 
@@ -103,13 +98,21 @@ function addContact() {
   };
 
   dataContacts.push(newContact);
-  alert("✅ New contact added succesfully!");
+  console.log("✅ New contact added succesfully!");
 
   displayContacts(dataContacts);
 }
 
-//displayContacts(dataContacts);
+// displayContacts(dataContacts);
 
-displayContacts(searchContacts(dataContacts));
+// displayContacts(searchContacts(dataContacts));
 
-//addContact();
+addContact(
+  "Pak Rudi",
+  "+6281234567890",
+  "rudi@example.com",
+  "Jl. Jalan",
+  "Palembang",
+  "12345",
+  "Indonesia"
+);

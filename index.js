@@ -1,6 +1,6 @@
 console.log("Address Book");
 
-const dataContacts = [
+let dataContacts = [
   {
     id: 1,
     fullName: "Rudi Heriansyah",
@@ -51,41 +51,44 @@ const dataContacts = [
   },
 ];
 
-// To display contacts
-function displayContacts(contacts) {
-  for (let index = 0; index < contacts.length; index++) {
-    const contact = contacts[index];
-    console.log(`
-    👤 ${contact.fullName}
-    📞 ${contact.phone} 
-    ✉️ ${contact.email} 
-    🏠 ${contact.address.street} 
-    🏙️ ${contact.address.city} ${contact.address.zipCode} 
-    🌍 ${contact.address.country}
-  `);
-  }
+function showContacts(contacts) {
+  contacts.forEach((contact) => renderContact(contact));
 }
 
-// To search contacts
-function searchContacts(contacts) {
-  const keyword = prompt("Enter any name to find: ");
+function renderContact(contact) {
+  console.log(`
+    😊 ${contact.id}
+    👤 ${contact.fullName}
+    📞 ${contact.phone}
+    ✉️ ${contact.email}
+    🏠 ${contact.address.street}
+    🏙️ ${contact.address.city}
+    📍 ${contact.address.zipCode}
+    🌍 ${contact.address.country}
+  `);
+}
 
+function searchContacts(contacts, keyword) {
   const searchResults = contacts.filter((contact) =>
     contact.fullName.toLowerCase().includes(keyword.toLowerCase())
   );
+
+  if (searchResults.length === 0) {
+    console.log("No contacts found matching the keyword!");
+  }
+
   return searchResults;
 }
 
-// To add contact
-function addContact() {
-  const fullName = prompt("Enter full name: ");
-  const phone = prompt("Enter phone number: ");
-  const email = prompt("Enter e-mail address: ");
-  const street = prompt("Enter street address: ");
-  const city = prompt("Enter city: ");
-  const zipCode = prompt("Enter ZIP code: ");
-  const country = prompt("Enter country: ");
-
+function addContact(
+  fullName = "Unknown",
+  phone = null,
+  email = null,
+  street = null,
+  city = null,
+  zipCode = null,
+  country = null
+) {
   const newId =
     dataContacts.length > 0 ? dataContacts[dataContacts.length - 1].id + 1 : 1;
 
@@ -102,14 +105,35 @@ function addContact() {
     },
   };
 
-  dataContacts.push(newContact);
-  alert("✅ New contact added succesfully!");
+  dataContacts = [...dataContacts, newContact];
+  console.log("✅ New contact added succesfully!");
 
-  displayContacts(dataContacts);
+  showContacts(dataContacts);
 }
 
-//displayContacts(dataContacts);
+function deleteContact(contacts, id) {
+  const updatedContacts = contacts.filter((contact) => contact.id != id);
 
-displayContacts(searchContacts(dataContacts));
+  dataContacts = updatedContacts;
+  showContacts(dataContacts);
+}
 
-//addContact();
+function editContact(contacts, id, newContact) {
+  dataContacts = updatedContacts;
+}
+
+// showContacts(dataContacts);
+
+// showContacts(searchContacts(dataContacts, "syah"));
+
+// addContact(
+//   "Tikitaka",
+//   "+899-2323-3232",
+//   "ronaldisnho@gmail.com",
+//   "Alberqueqe St.",
+//   "Konoha",
+//   "2323111",
+//   "Mozambique"
+// );
+
+// deleteContact(dataContacts, 1);

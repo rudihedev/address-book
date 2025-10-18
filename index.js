@@ -81,6 +81,7 @@ function searchContacts(contacts, keyword) {
 }
 
 function addContact(
+  contacts,
   fullName = "Unknown",
   phone = null,
   email = null,
@@ -89,8 +90,7 @@ function addContact(
   zipCode = null,
   country = null
 ) {
-  const newId =
-    dataContacts.length > 0 ? dataContacts[dataContacts.length - 1].id + 1 : 1;
+  const newId = contacts.length > 0 ? contacts[contacts.length - 1].id + 1 : 1;
 
   const newContact = {
     id: newId,
@@ -105,7 +105,8 @@ function addContact(
     },
   };
 
-  dataContacts = [...dataContacts, newContact];
+  dataContacts = [...contacts, newContact];
+
   console.log("✅ New contact added succesfully!");
 
   showContacts(dataContacts);
@@ -119,6 +120,8 @@ function deleteContact(contacts, id) {
 }
 
 function editContact(contacts, id, newContact) {
+  // TODO: Implement
+
   dataContacts = updatedContacts;
 }
 
@@ -126,14 +129,28 @@ function editContact(contacts, id, newContact) {
 
 // showContacts(searchContacts(dataContacts, "syah"));
 
-// addContact(
-//   "Tikitaka",
-//   "+899-2323-3232",
-//   "ronaldisnho@gmail.com",
-//   "Alberqueqe St.",
-//   "Konoha",
-//   "2323111",
-//   "Mozambique"
-// );
+addContact(
+  dataContacts,
+  "Tikitaka",
+  "+899-2323-3232",
+  "ronaldisnho@gmail.com",
+  "Alberqueqe St.",
+  "Konoha",
+  "2323111",
+  "Mozambique"
+);
+
+// TODO: Make this work
+// addContact(dataContacts, {
+//   fullName: "Tikitaka",
+//   phone: "+899-2323-3232",
+//   email: "ronaldisnho@gmail.com",
+//   address: {
+//     street: "Alberqueqe St.",
+//     city: "Konoha",
+//     zipCode: "2323111",
+//     country: "Mozambique",
+//   },
+// });
 
 // deleteContact(dataContacts, 1);

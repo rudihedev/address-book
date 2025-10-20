@@ -44,20 +44,26 @@ let dataContacts = [
 ];
 
 function showContacts(contacts) {
-  contacts.forEach((contact) => renderContact(contact));
+  const appElement = document.getElementById("app");
+
+  const contactsAsString = contacts.map((contact) => renderContact(contact));
+
+  appElement.innerHTML = `<ul id="contacts">
+    ${contactsAsString}
+  </ul>`;
 }
 
 function renderContact(contact) {
-  console.log(`
-    😊 ${contact.id}
-    👤 ${contact.fullName}
-    📞 ${contact.phone}
-    ✉️ ${contact.email}
-    🏠 ${contact.street}
-    🏙️ ${contact.city}
-    📍 ${contact.zipCode}
-    🌍 ${contact.country}
-  `);
+  return `<li class="p-2 border border-black rounded">
+    <p>😊 ${contact.id}</p>
+    <h2 class="font-bold">👤 ${contact.fullName}</h2>
+    <p>📞 ${contact.phone}</p>
+    <p>✉️ ${contact.email}</p>
+    <p>🏠 ${contact.street}</p>
+    <p>🏙️ ${contact.city}</p>
+    <p>📍 ${contact.zipCode}</p>
+    <p>🌍 ${contact.country}</p>
+  </li>`;
 }
 
 function searchContacts(contacts, keyword) {
@@ -118,7 +124,7 @@ function editContact(contacts, id, updates) {
   showContacts(dataContacts);
 }
 
-// showContacts(dataContacts);
+showContacts(dataContacts);
 
 // showContacts(searchContacts(dataContacts, "syah"));
 

@@ -43,12 +43,14 @@ let dataContacts = [
   },
 ];
 
-function showContacts(contacts) {
+function renderContacts(contacts) {
   const appElement = document.getElementById("app");
 
-  const contactsAsString = contacts.map((contact) => renderContact(contact));
+  const contactsAsString = contacts
+    .map((contact) => renderContact(contact))
+    .join("");
 
-  appElement.innerHTML = `<ul id="contacts">
+  appElement.innerHTML = `<ul id="contacts" class="space-y-4">
     ${contactsAsString}
   </ul>`;
 }
@@ -98,14 +100,14 @@ function addContact(
   dataContacts = [...contacts, newContact];
   console.log("✅ New contact added succesfully!");
 
-  showContacts(dataContacts);
+  renderContacts(dataContacts);
 }
 
 function deleteContact(contacts, id) {
   const updatedContacts = contacts.filter((contact) => contact.id != id);
 
   dataContacts = updatedContacts;
-  showContacts(dataContacts);
+  renderContacts(dataContacts);
 }
 
 function editContact(contacts, id, updates) {
@@ -121,10 +123,12 @@ function editContact(contacts, id, updates) {
   });
 
   dataContacts = updatedContacts;
-  showContacts(dataContacts);
+  renderContacts(dataContacts);
 }
 
-showContacts(dataContacts);
+// ------------------------------------------------------------
+
+renderContacts(dataContacts);
 
 // showContacts(searchContacts(dataContacts, "syah"));
 

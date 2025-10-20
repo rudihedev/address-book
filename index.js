@@ -72,37 +72,25 @@ function searchContacts(contacts, keyword) {
   return searchResults;
 }
 
-function addContact(contactList = []) {
-  contactList.forEach((contact) => {
-    const newId =
-      dataContacts.length > 0
-        ? dataContacts[dataContacts.length - 1].id + 1
-        : 1;
+function addContact(
+  contacts,
+  { fullName, phone, email, street, city, zipCode, country }
+) {
+  let newId = contacts.length > 0 ? contacts[contacts.length - 1].id + 1 : 1;
 
-    const {
-      fullName = "Unknown",
-      phone = null,
-      email = null,
-      street = null,
-      city = null,
-      zipCode = null,
-      country = null,
-    } = contact;
+  const newContact = {
+    id: newId,
+    fullName,
+    phone,
+    email,
+    street,
+    city,
+    zipCode,
+    country,
+  };
 
-    const newContact = {
-      id: newId,
-      fullName,
-      phone,
-      email,
-      street,
-      city,
-      zipCode,
-      country,
-    };
-
-    dataContacts = [...dataContacts, newContact];
-    console.log("✅ New contact added succesfully!");
-  });
+  dataContacts = [...contacts, newContact];
+  console.log("✅ New contact added succesfully!");
 
   showContacts(dataContacts);
 }
@@ -114,28 +102,12 @@ function deleteContact(contacts, id) {
   showContacts(dataContacts);
 }
 
-function editContact(
-  contacts,
-  id,
-  fullName,
-  phone,
-  email,
-  street,
-  city,
-  zipCode,
-  country
-) {
+function editContact(contacts, id, updates) {
   const updatedContacts = contacts.map((contact) => {
     if (contact.id === id) {
       return {
-        id,
-        fullName,
-        phone,
-        email,
-        street,
-        city,
-        zipCode,
-        country,
+        ...contact,
+        ...updates,
       };
     } else {
       return contact;
@@ -150,37 +122,16 @@ function editContact(
 
 // showContacts(searchContacts(dataContacts, "syah"));
 
-// addContact([
-//   {
-//     fullName: "Tikitaka",
-//     phone: "+899-2323-3232",
-//     email: "ronaldisnho@gmail.com",
-//     street: "Alberqueqe St.",
-//     city: "Konoha",
-//     zipCode: "2323111",
-//     country: "Mozambique",
-//   },
-//   {
-//     fullName: "Wakawaka",
-//     phone: "+777-1111-2421",
-//     email: "wakawaka@gmail.com",
-//     street: "Ganbari St.",
-//     city: "Bristol",
-//     zipCode: "2256854",
-//     country: "United Kingdom",
-//   },
-// ]);
+// addContact(dataContacts, {
+//   fullName: "Tikitaka",
+//   phone: "+899-2323-3232",
+//   email: "ronaldisnho@gmail.com",
+//   street: "Alberqueqe St.",
+//   city: "Konoha",
+//   zipCode: "2323111",
+//   country: "Mozambique",
+// });
 
 // deleteContact(dataContacts, 1);
 
-// editContact(
-//   dataContacts,
-//   3,
-//   "Ita Agustina",
-//   "+62232523111",
-//   "devita@gmail.com",
-//   "Sako St.",
-//   "Madinah",
-//   "423232",
-//   "KSA"
-// );
+// editContact(dataContacts, 3, { country: "KSA", city: "Thaif" });

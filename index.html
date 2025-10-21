@@ -7,8 +7,71 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   </head>
   <body class="p-2 space-y-8">
-    <h1 class="font-bold text-2xl">Address Book</h1>
-    <main id="app" class="max-w-xl"></main>
+    <!-- Search box -->
+    <div
+      class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+    >
+      <h1 class="font-bold text-2xl">
+        Address Book<span id="contactCount" class="text-gray-500 p-2">(0)</span>
+      </h1>
+      <input
+        type="text"
+        id="searchBox"
+        placeholder="Search by name..."
+        class="w-full bg-gray-200 max-w-xs p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+      />
+    </div>
+
+    <form
+      id="addContactForm"
+      class="bg-[url('./images/koenigsegg-jesko.jpg')] bg-center bg-cover bg-white p-4 rounded-xl shadow-md space-y-4 border border-gray-200"
+    >
+      <div class="grid grid-cols-1 sm:grid-cols-5 gap-4">
+        <input
+          type="text"
+          id="fullName"
+          placeholder="Full Name..."
+          class="text-white p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
+          required
+        />
+        <input
+          type="text"
+          id="phone"
+          placeholder="Phone..."
+          class="text-white p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
+          required
+        />
+        <input
+          type="email"
+          id="email"
+          placeholder="Email..."
+          class="text-white p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
+          required
+        />
+        <input
+          type="text"
+          id="city"
+          placeholder="City..."
+          class="text-white p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
+          required
+        />
+        <input
+          type="text"
+          id="country"
+          placeholder="Country..."
+          class="text-white p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
+          required
+        />
+      </div>
+      <button
+        type="submit"
+        class="w-full sm:w-auto bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 font-bold"
+      >
+        Add Contact
+      </button>
+    </form>
+
+    <main id="app" class="w-full"></main>
     <script src="/index.js"></script>
   </body>
 </html>

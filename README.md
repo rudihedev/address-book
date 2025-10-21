@@ -21,4 +21,4 @@ Should you have any inqueries, kindly contact the above socmeds.
 
 ## Preview
 
-![home](images/address.jpg)
+![home](images/preview.jpg)

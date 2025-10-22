@@ -9,7 +9,14 @@ function saveContacts() {
 function renderContacts(contacts) {
   const appElement = document.getElementById("app");
 
-  contacts.sort((a, b) => a.fullName.localeCompare(b.fullName));
+  // contacts.sort((a, b) => a.fullName.localeCompare(b.fullName));
+  // Urutkan: favorit dulu, lalu nama
+  contacts.sort((a, b) => {
+    if (b.favorite === a.favorite) {
+      return a.fullName.localeCompare(b.fullName);
+    }
+    return b.favorite - a.favorite; // favorit (true) di atas
+  });
 
   const contactsAsString = contacts
     .map((contact) => renderContact(contact))
@@ -19,11 +26,24 @@ function renderContacts(contacts) {
     ${contactsAsString}
   </ul>`;
 
+  // Event listener untuk tombol favorit
+  document.querySelectorAll(".btn-fav").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const fullName = e.currentTarget.dataset.fullname;
+      toggleFavorite(fullName);
+    });
+  });
+
   // Event listener to Delete button
   document.querySelectorAll(".btn-delete").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       const fullName = e.currentTarget.dataset.fullname;
-      deleteContact(dataContacts, fullName);
+      const confirmDelete = confirm(
+        `Are you sure you want to delete ${fullName}?`
+      );
+      if (confirmDelete) {
+        deleteContact(dataContacts, fullName);
+      }
     });
   });
 
@@ -39,7 +59,12 @@ function renderContacts(contacts) {
 }
 
 function renderContact(contact) {
-  return `<li class="relative overflow-visible p-4 border border-gray-300 rounded-xl shadow-md bg-white h-full hover:shadow-lg transition-shadow duration-300 flex flex-col justify-between">
+  const favBg = contact.favorite
+    ? "bg-green-100 border-green-400"
+    : "bg-white border-gray-300";
+
+  return `<li class="relative overflow-visible p-4 border rounded-xl shadow-md ${favBg} 
+    h-full hover:shadow-lg transition-shadow duration-300 flex flex-col justify-between">
   
   <div>
     <h2 class="font-bold text-lg text-gray-800">👤 ${contact.fullName}</h2>
@@ -50,6 +75,21 @@ function renderContact(contact) {
   </div>  
   
   <div class="absolute bottom-2 right-2 flex gap-1">
+  <!-- Favorite -->
+    <div class="relative group">
+      <button 
+        class="btn-fav ${
+          contact.favorite ? "text-yellow-300" : "text-yellow-400"
+        } hover:text-yellow-500 text-2xl cursor-pointer"
+        data-fullname="${contact.fullName}"
+      >
+        ${contact.favorite ? "⭐" : "☆"}
+      </button>
+      <span class="absolute bottom-8 right-0 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+        Favorite
+      </span>
+    </div>
+
     <div class="relative group">
           <button 
             class="btn-edit text-blue-500 hover:text-blue-700 text-xl cursor-pointer"
@@ -63,7 +103,9 @@ function renderContact(contact) {
         </div>
     
         <div class="relative group">
-    <button class="btn-delete text-red-500 hover:text-red-700 text-xl cursor-pointer" data-fullname = "${contact.fullName}">🗑️</button>  
+    <button class="btn-delete text-red-500 hover:text-red-700 text-xl cursor-pointer" data-fullname = "${
+      contact.fullName
+    }">🗑️</button>  
     <span class="absolute bottom-8 right-0 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
       Delete
     </span>  
@@ -118,6 +160,23 @@ function toggleEditContact(fullName, btn) {
     btn.dataset.mode = "edit";
     tooltip.textContent = "Save";
   }
+}
+
+function toggleFavorite(fullName) {
+  const contact = dataContacts.find((c) => c.fullName === fullName);
+  if (!contact) return;
+
+  contact.favorite = !contact.favorite;
+
+  // 🔹 Sort lagi setiap kali favorit diubah
+  dataContacts.sort((a, b) => {
+    if (a.favorite && !b.favorite) return -1;
+    if (!a.favorite && b.favorite) return 1;
+    return a.fullName.localeCompare(b.fullName);
+  });
+
+  saveContacts();
+  renderContacts(dataContacts);
 }
 
 function searchContacts(contacts, keyword) {
@@ -219,6 +278,14 @@ document
     // Tambahkan kontak baru ke dataContacts
     const newContact = { fullName, phone, email, city, country };
     dataContacts.push(newContact);
+
+    // Urutkan ulang setelah menambah kontak baru
+    dataContacts.sort((a, b) => {
+      if (a.favorite && !b.favorite) return -1;
+      if (!a.favorite && b.favorite) return 1;
+      return a.fullName.localeCompare(b.fullName);
+    });
+
     saveContacts();
 
     // Render ulang daftar kontak

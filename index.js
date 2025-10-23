@@ -243,7 +243,7 @@ function updateContactCount(contacts) {
   }
 }
 
-// Event handler for searchBox
+// Event listener for searchBox
 const searchBox = document.getElementById("searchBox");
 
 searchBox.addEventListener("input", (e) => {
@@ -256,7 +256,7 @@ searchBox.addEventListener("input", (e) => {
   }
 });
 
-// Event handler for addContactForm
+// Event listener for addContactForm
 document
   .getElementById("addContactForm")
   .addEventListener("submit", function (e) {
@@ -270,9 +270,18 @@ document
     const country = document.getElementById("country").value.trim();
 
     // Validasi sederhana
-    if (!fullName || !phone || !email) {
-      alert("Please fill in at least full name, phone, and email!");
+    if (!fullName || !phone || !email || !city || !country) {
+      alert("Please fill in all fields!");
       return;
+    }
+
+    // Check for duplication
+    const duplicate = dataContacts.some(
+      (c) => c.fullName.trim().toLowerCase() === fullName.toLowerCase()
+    );
+    if (duplicate) {
+      alert("Nama kontak sudah ada! Silakan gunakan nama lain.");
+      return; // hentikan proses
     }
 
     // Tambahkan kontak baru ke dataContacts

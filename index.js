@@ -10,10 +10,10 @@ function loadContacts() {
   const storedContacts = localStorage.getItem("contacts");
 
   if (storedContacts) {
-    // Kalau sudah ada data tersimpan
+    // If dataContacts exist, retirieve then
     dataContacts = JSON.parse(storedContacts);
   } else {
-    // Kalau belum ada, buat satu kontak default
+    // If no, crete the following for the new entry
     dataContacts = [
       {
         fullName: "Al-Khawarizmi",
@@ -23,7 +23,7 @@ function loadContacts() {
         country: "Uzbekistan",
       },
     ];
-    saveContacts(); // simpan agar tetap ada untuk kunjungan berikutnya
+    saveContacts(); // Keep it safe to make it exists for next visit"
   }
 
   renderContacts(dataContacts);
@@ -33,12 +33,12 @@ function renderContacts(contacts) {
   const appElement = document.getElementById("app");
 
   // contacts.sort((a, b) => a.fullName.localeCompare(b.fullName));
-  // Urutkan: favorit dulu, lalu nama
+  // Sort by: favorit first, next by fullName
   contacts.sort((a, b) => {
     if (b.favorite === a.favorite) {
       return a.fullName.localeCompare(b.fullName);
     }
-    return b.favorite - a.favorite; // favorit (true) di atas
+    return b.favorite - a.favorite; // favorit (true) at first place
   });
 
   const contactsAsString = contacts
@@ -49,7 +49,7 @@ function renderContacts(contacts) {
     ${contactsAsString}
   </ul>`;
 
-  // Event listener untuk tombol favorit
+  // Event listener for favorite icon
   document.querySelectorAll(".btn-fav").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       const fullName = e.currentTarget.dataset.fullname;
@@ -57,7 +57,7 @@ function renderContacts(contacts) {
     });
   });
 
-  // Event listener to Delete button
+  // Event listener for Delete button
   document.querySelectorAll(".btn-delete").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       const fullName = e.currentTarget.dataset.fullname;
@@ -191,7 +191,7 @@ function toggleFavorite(fullName) {
 
   contact.favorite = !contact.favorite;
 
-  // 🔹 Sort lagi setiap kali favorit diubah
+  // 🔹 Re-sort everytime the favorite is changing
   dataContacts.sort((a, b) => {
     if (a.favorite && !b.favorite) return -1;
     if (!a.favorite && b.favorite) return 1;
@@ -288,14 +288,14 @@ document
   .addEventListener("submit", function (e) {
     e.preventDefault(); // mencegah reload halaman
 
-    // Ambil nilai dari input
+    // Retrieve contacts data from input boxes
     const fullName = document.getElementById("fullName").value.trim();
     const phone = document.getElementById("phone").value.trim();
     const email = document.getElementById("email").value.trim();
     const city = document.getElementById("city").value.trim();
     const country = document.getElementById("country").value.trim();
 
-    // Validasi sederhana
+    // Simple validation to fill-up data
     if (!fullName || !phone || !email || !city || !country) {
       alert("Please fill in all fields!");
       return;
@@ -306,15 +306,15 @@ document
       (c) => c.fullName.trim().toLowerCase() === fullName.toLowerCase()
     );
     if (duplicate) {
-      alert("Nama kontak sudah ada! Silakan gunakan nama lain.");
-      return; // hentikan proses
+      alert("Name already exists! Kindly find another different name!");
+      return; // Stop the process
     }
 
-    // Tambahkan kontak baru ke dataContacts
+    // Add the newContacts to dataContacts
     const newContact = { fullName, phone, email, city, country };
     dataContacts.push(newContact);
 
-    // Urutkan ulang setelah menambah kontak baru
+    // Re-sort after adding newContact
     dataContacts.sort((a, b) => {
       if (a.favorite && !b.favorite) return -1;
       if (!a.favorite && b.favorite) return 1;
@@ -326,7 +326,7 @@ document
     // Render ulang daftar kontak
     renderContacts(dataContacts);
 
-    // Reset form setelah submit
+    // Reset form after submission
     e.target.reset();
 
     console.log("✅ Contact added:", newContact);

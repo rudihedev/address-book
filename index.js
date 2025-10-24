@@ -6,6 +6,29 @@ function saveContacts() {
   localStorage.setItem("contacts", JSON.stringify(dataContacts));
 }
 
+function loadContacts() {
+  const storedContacts = localStorage.getItem("contacts");
+
+  if (storedContacts) {
+    // Kalau sudah ada data tersimpan
+    dataContacts = JSON.parse(storedContacts);
+  } else {
+    // Kalau belum ada, buat satu kontak default
+    dataContacts = [
+      {
+        fullName: "Al-Khawarizmi",
+        email: "khawarizmi@gmail.com",
+        phone: "+43-333-3224-3564",
+        city: "Khiva",
+        country: "Uzbekistan",
+      },
+    ];
+    saveContacts(); // simpan agar tetap ada untuk kunjungan berikutnya
+  }
+
+  renderContacts(dataContacts);
+}
+
 function renderContacts(contacts) {
   const appElement = document.getElementById("app");
 
@@ -242,6 +265,9 @@ function updateContactCount(contacts) {
     countElement.textContent = `(${contacts.length})`;
   }
 }
+
+// Retrieve dataContacts
+window.onload = loadContacts;
 
 // Event listener for searchBox
 const searchBox = document.getElementById("searchBox");

@@ -31,6 +31,13 @@ function loadContacts() {
 
 function renderContacts(contacts) {
   const appElement = document.getElementById("app");
+  const searchParams = new URLSearchParams(window.location.search);
+  const query = searchParams.get("q");
+
+  const queryElement = document.getElementById("q");
+  queryElement.value = query;
+
+  const filteredContacts = query ? searchContacts(contacts, query) : contacts;
 
   // contacts.sort((a, b) => a.fullName.localeCompare(b.fullName));
   // Sort by: favorit first, next by fullName
@@ -41,7 +48,7 @@ function renderContacts(contacts) {
     return b.favorite - a.favorite; // favorit (true) at first place
   });
 
-  const contactsAsString = contacts
+  const contactsAsString = filteredContacts
     .map((contact) => renderContact(contact))
     .join("");
 
@@ -78,7 +85,7 @@ function renderContacts(contacts) {
     });
   });
 
-  updateContactCount(contacts);
+  updateContactCount(filteredContacts);
 }
 
 function renderContact(contact) {
@@ -269,18 +276,18 @@ function updateContactCount(contacts) {
 // Retrieve dataContacts
 window.onload = loadContacts;
 
-// Event listener for searchBox
-const searchBox = document.getElementById("searchBox");
+// // Event listener for searchBox
+// const searchBox = document.getElementById("searchBox");
 
-searchBox.addEventListener("input", (e) => {
-  const keyword = e.target.value.trim();
-  if (keyword === "") {
-    renderContacts(dataContacts);
-  } else {
-    const results = searchContacts(dataContacts, keyword);
-    renderContacts(results);
-  }
-});
+// searchBox.addEventListener("input", (e) => {
+//   const keyword = e.target.value.trim();
+//   if (keyword === "") {
+//     renderContacts(dataContacts);
+//   } else {
+//     const results = searchContacts(dataContacts, keyword);
+//     renderContacts(results);
+//   }
+// });
 
 // Event listener for addContactForm
 document

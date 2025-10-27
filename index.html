@@ -8,19 +8,24 @@
   </head>
   <body class="p-4 space-y-4">
     <!-- Search box -->
-    <div
+    <header
       class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2"
     >
       <h1 class="font-bold text-2xl">
-        Address Book<span id="contactCount" class="text-gray-500 p-2">(0)</span>
+        <a href="/">Address Book</a
+        ><span id="contactCount" class="text-gray-500 p-2">(0)</span>
       </h1>
-      <input
-        type="text"
-        id="searchBox"
-        placeholder="Search by name..."
-        class="w-full bg-gray-200 max-w-xs p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-      />
-    </div>
+      <form method="get">
+        <label for="q"></label>
+        <input
+          type="search"
+          id="q"
+          name="q"
+          placeholder="Search by name..."
+          class="w-67 bg-gray-200 max-w-xs p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+      </form>
+    </header>
 
     <form
       id="addContactForm"

@@ -276,19 +276,6 @@ function updateContactCount(contacts) {
 // Retrieve dataContacts
 window.onload = loadContacts;
 
-// // Event listener for searchBox
-// const searchBox = document.getElementById("searchBox");
-
-// searchBox.addEventListener("input", (e) => {
-//   const keyword = e.target.value.trim();
-//   if (keyword === "") {
-//     renderContacts(dataContacts);
-//   } else {
-//     const results = searchContacts(dataContacts, keyword);
-//     renderContacts(results);
-//   }
-// });
-
 // Event listener for addContactForm
 document
   .getElementById("addContactForm")

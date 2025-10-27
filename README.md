@@ -4,8 +4,8 @@ This project is dealing with organize information on name, phone, email, and add
 
 ## Links
 
-- Check it out here: [address.rudihe.com](https://address.rudihe.com)
-- GitHub Repo: [github.com/rudihedev/address](https://github.com/rudihedev/address)
+- Check it out here: [address-book.rudihe.com](https://address-book.rudihe.com)
+- GitHub Repo: [github.com/rudihedev/address-book](https://github.com/rudihedev/address-book)
 - Flowchart Design in Whimsical: [address.rudihe.com/whimsical](https://whimsical.com/address-MSoK8fnXQveG94MjYyJyYk)
 
 ## Functions
@@ -14,6 +14,7 @@ This project is dealing with organize information on name, phone, email, and add
 - Edit
 - View
 - Delete
+- Search
 
 ## Contact
 

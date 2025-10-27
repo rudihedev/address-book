@@ -1,20 +1,28 @@
+// TODO
+// Restore id in contacts data
+// ID should always be recorded/saved/managed
+
 // Initialize dataContacts in localStorage
 let dataContacts = JSON.parse(localStorage.getItem("contacts")) || [];
 renderContacts(dataContacts);
 
-function saveContacts() {
-  localStorage.setItem("contacts", JSON.stringify(dataContacts));
+function saveContacts(contacts) {
+  localStorage.setItem("contacts", JSON.stringify(contacts));
 }
+
+// TODO: Make sure differentiate dataContacts, contacts, storedContacts
 
 function loadContacts() {
   const storedContacts = localStorage.getItem("contacts");
 
+  let contacts = [];
+
   if (storedContacts) {
-    // If dataContacts exist, retirieve then
-    dataContacts = JSON.parse(storedContacts);
+    // If dataContacts exist, retrieve them
+    contacts = JSON.parse(storedContacts);
   } else {
-    // If no, crete the following for the new entry
-    dataContacts = [
+    // If not, create the following for the new entry
+    contacts = [
       {
         fullName: "Al-Khawarizmi",
         email: "khawarizmi@gmail.com",
@@ -23,10 +31,10 @@ function loadContacts() {
         country: "Uzbekistan",
       },
     ];
-    saveContacts(); // Keep it safe to make it exists for next visit"
+    saveContacts(contacts);
   }
 
-  renderContacts(dataContacts);
+  return contacts;
 }
 
 function renderContacts(contacts) {
@@ -39,13 +47,11 @@ function renderContacts(contacts) {
 
   const filteredContacts = query ? searchContacts(contacts, query) : contacts;
 
-  // contacts.sort((a, b) => a.fullName.localeCompare(b.fullName));
-  // Sort by: favorit first, next by fullName
   contacts.sort((a, b) => {
     if (b.favorite === a.favorite) {
       return a.fullName.localeCompare(b.fullName);
     }
-    return b.favorite - a.favorite; // favorit (true) at first place
+    return b.favorite - a.favorite;
   });
 
   const contactsAsString = filteredContacts
@@ -59,29 +65,27 @@ function renderContacts(contacts) {
   // Event listener for favorite icon
   document.querySelectorAll(".btn-fav").forEach((btn) => {
     btn.addEventListener("click", (e) => {
-      const fullName = e.currentTarget.dataset.fullname;
-      toggleFavorite(fullName);
+      const id = e.currentTarget.dataset.id;
+      toggleFavorite(id);
     });
   });
 
   // Event listener for Delete button
   document.querySelectorAll(".btn-delete").forEach((btn) => {
     btn.addEventListener("click", (e) => {
-      const fullName = e.currentTarget.dataset.fullname;
-      const confirmDelete = confirm(
-        `Are you sure you want to delete ${fullName}?`
-      );
+      const id = e.currentTarget.dataset.id;
+      const confirmDelete = confirm(`Are you sure you want to delete ${id}?`);
       if (confirmDelete) {
-        deleteContact(dataContacts, fullName);
+        deleteContact(dataContacts, id);
       }
     });
   });
 
   // Edit contact (phone, email, city, country)
-  document.querySelectorAll(".btn-edit").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      const fullName = e.currentTarget.dataset.fullname;
-      toggleEditContact(fullName, btn);
+  document.querySelectorAll(".btn-edit").forEach((buttonElement) => {
+    buttonElement.addEventListener("click", (event) => {
+      const id = event.currentTarget.dataset.id;
+      toggleEditContact(id, buttonElement);
     });
   });
 
@@ -89,11 +93,11 @@ function renderContacts(contacts) {
 }
 
 function renderContact(contact) {
-  const favBg = contact.favorite
+  const favoriteBackground = contact.favorite
     ? "bg-green-100 border-green-400"
     : "bg-white border-gray-300";
 
-  return `<li class="relative overflow-visible p-4 border rounded-xl shadow-md ${favBg} 
+  return `<li class="relative overflow-visible p-4 border rounded-xl shadow-md ${favoriteBackground} 
     h-full hover:shadow-lg transition-shadow duration-300 flex flex-col justify-between">
   
   <div>
@@ -105,13 +109,13 @@ function renderContact(contact) {
   </div>  
   
   <div class="absolute bottom-2 right-2 flex gap-1">
-  <!-- Favorite -->
+    <!-- Favorite -->
     <div class="relative group">
-      <button 
+      <button
         class="btn-fav ${
           contact.favorite ? "text-yellow-300" : "text-yellow-400"
         } hover:text-yellow-500 text-2xl cursor-pointer"
-        data-fullname="${contact.fullName}"
+        data-id="${contact.id}"
       >
         ${contact.favorite ? "⭐" : "☆"}
       </button>
@@ -121,60 +125,67 @@ function renderContact(contact) {
     </div>
 
     <div class="relative group">
-          <button 
-            class="btn-edit text-blue-500 hover:text-blue-700 text-xl cursor-pointer"
-            data-fullname="${contact.fullName}"
-          >
-            ✏️
-          </button>
-          <span class="absolute bottom-8 right-0 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-            Edit
-          </span>
-        </div>
-    
-        <div class="relative group">
-    <button class="btn-delete text-red-500 hover:text-red-700 text-xl cursor-pointer" data-fullname = "${
-      contact.fullName
-    }">🗑️</button>  
-    <span class="absolute bottom-8 right-0 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-      Delete
-    </span>  
+      <button
+        class="btn-edit text-blue-500 hover:text-blue-700 text-xl cursor-pointer"
+        data-id="${contact.id}"
+      >
+        ✏️
+      </button>
+      <span class="absolute bottom-8 right-0 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+        Edit
+      </span>
+    </div>
+
+    <div class="relative group">
+      <button class="btn-delete text-red-500 hover:text-red-700 text-xl cursor-pointer" data-id="${
+        contact.id
+      }">🗑️</button>
+      <span class="absolute bottom-8 right-0 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+        Delete
+      </span>
     </div>
   </div>
-  </li>`;
+</li>`;
 }
 
-function toggleEditContact(fullName, btn) {
-  const contact = dataContacts.find((c) => c.fullName === fullName);
+function toggleEditContact(contacts, id, buttonElement) {
+  const contact = contacts.find((contact) => contact.id === id);
   if (!contact) return;
 
-  const li = btn.closest("li");
+  const li = buttonElement.closest("li");
+  // TODO: Full name
   const phoneSpan = li.querySelector(".phone-text");
   const emailSpan = li.querySelector(".email-text");
   const citySpan = li.querySelector(".city-text");
   const countrySpan = li.querySelector(".country-text");
-  const tooltip = btn.parentElement.querySelector("span"); // ✅ ambil elemen tooltip
+  const tooltip = btn.parentElement.querySelector("span");
 
-  if (btn.dataset.mode === "edit") {
+  if (buttonElement.dataset.mode === "edit") {
     // Save mode
     const phoneInput = li.querySelector(".phone-input");
     const emailInput = li.querySelector(".email-input");
     const cityInput = li.querySelector(".city-input");
     const countryInput = li.querySelector(".country-input");
 
+    const newFullName = fullNameInput.value.trim();
     const newPhone = phoneInput.value.trim();
     const newEmail = emailInput.value.trim();
     const newCity = cityInput.value.trim();
     const newCountry = countryInput.value.trim();
 
-    // Simpan perubahan
-    if (newPhone) contact.phone = newPhone;
-    if (newEmail) contact.email = newEmail;
-    if (newCity) contact.city = newCity;
-    if (newCountry) contact.country = newCountry;
+    const updatedContacts = contacts.map((contact) => {
+      return {
+        ...contact,
+        fullName: newFullName,
+        phone: newPhone,
+        email: newEmail,
+        city: newCity,
+        country: newCountry,
+      };
+    });
 
-    renderContacts(dataContacts);
-    saveContacts();
+    renderContacts(updatedContacts);
+    saveContacts(updatedContacts);
   } else {
     const currentPhone = phoneSpan.textContent;
     const currentEmail = emailSpan.textContent;
@@ -192,21 +203,19 @@ function toggleEditContact(fullName, btn) {
   }
 }
 
-function toggleFavorite(fullName) {
-  const contact = dataContacts.find((c) => c.fullName === fullName);
+function toggleFavorite(contacts, fullName) {
+  const contact = contacts.find((c) => c.fullName === fullName);
   if (!contact) return;
 
-  contact.favorite = !contact.favorite;
-
-  // 🔹 Re-sort everytime the favorite is changing
-  dataContacts.sort((a, b) => {
-    if (a.favorite && !b.favorite) return -1;
-    if (!a.favorite && b.favorite) return 1;
-    return a.fullName.localeCompare(b.fullName);
+  const updatedContacts = contacts.map((contact) => {
+    return {
+      ...contact,
+      favorite: !contact.favorite,
+    };
   });
 
-  saveContacts();
-  renderContacts(dataContacts);
+  saveContacts(updatedContacts);
+  renderContacts(updatedContacts);
 }
 
 function searchContacts(contacts, keyword) {
@@ -233,7 +242,6 @@ function addContact(contacts, { fullName, phone, email, city, country }) {
   };
 
   dataContacts = [...contacts, newContact];
-  console.log("✅ New contact added succesfully!");
 
   renderContacts(dataContacts);
 }
@@ -243,9 +251,8 @@ function deleteContact(contacts, fullName) {
     (contact) => contact.fullName != fullName
   );
 
-  dataContacts = updatedContacts;
-  saveContacts();
-  renderContacts(dataContacts);
+  saveContacts(updatedContacts);
+  renderContacts(updatedContacts);
 }
 
 function editContact(contacts, fullName, updates) {
@@ -260,11 +267,9 @@ function editContact(contacts, fullName, updates) {
     }
   });
 
-  dataContacts = updatedContacts;
-  renderContacts(dataContacts);
+  saveContacts(updatedContacts);
+  renderContacts(updatedContacts);
 }
-
-renderContacts(dataContacts);
 
 function updateContactCount(contacts) {
   const countElement = document.getElementById("contactCount");
@@ -275,12 +280,13 @@ function updateContactCount(contacts) {
 
 // Retrieve dataContacts
 window.onload = loadContacts;
+renderContacts(dataContacts);
 
 // Event listener for addContactForm
 document
   .getElementById("addContactForm")
-  .addEventListener("submit", function (e) {
-    e.preventDefault(); // mencegah reload halaman
+  .addEventListener("submit", function (event) {
+    event.preventDefault(); // mencegah default behavior yaitu submit action / redirect
 
     // Retrieve contacts data from input boxes
     const fullName = document.getElementById("fullName").value.trim();
@@ -296,32 +302,23 @@ document
     }
 
     // Check for duplication
-    const duplicate = dataContacts.some(
-      (c) => c.fullName.trim().toLowerCase() === fullName.toLowerCase()
+    const isDuplicate = dataContacts.some(
+      (contact) =>
+        contact.fullName.trim().toLowerCase() === fullName.toLowerCase()
     );
-    if (duplicate) {
+
+    if (isDuplicate) {
       alert("Name already exists! Kindly find another different name!");
       return; // Stop the process
     }
 
-    // Add the newContacts to dataContacts
-    const newContact = { fullName, phone, email, city, country };
-    dataContacts.push(newContact);
+    // TODO: Set ID
+    const newContact = { id: 0, fullName, phone, email, city, country };
 
-    // Re-sort after adding newContact
-    dataContacts.sort((a, b) => {
-      if (a.favorite && !b.favorite) return -1;
-      if (!a.favorite && b.favorite) return 1;
-      return a.fullName.localeCompare(b.fullName);
-    });
+    const updatedContacts = [...dataContacts, newContact];
 
-    saveContacts();
+    event.target.reset();
 
-    // Render ulang daftar kontak
-    renderContacts(dataContacts);
-
-    // Reset form after submission
-    e.target.reset();
-
-    console.log("✅ Contact added:", newContact);
+    saveContacts(updatedContacts);
+    renderContacts(updatedContacts);
   });
